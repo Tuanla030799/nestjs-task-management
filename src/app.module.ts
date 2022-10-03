@@ -7,12 +7,12 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     TasksModule,
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'nest-test',
+      port: 3306,
+      username: 'root',
+      password: 'Aa@123456',
+      database: 'nest',
       autoLoadEntities: true,
       synchronize: true,
     }),

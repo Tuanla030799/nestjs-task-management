@@ -27,7 +27,8 @@ export class TasksRepository extends Repository<Task> {
     return tasks;
   }
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+  async createTasks(createTaskDto: CreateTaskDto): Promise<Task> {
+    console.log('repository');
     const { title, description } = createTaskDto;
 
     const task = this.create({
@@ -35,6 +36,8 @@ export class TasksRepository extends Repository<Task> {
       description,
       status: TaskStatus.OPEN,
     });
+
+    console.log(task);
 
     await this.save(task);
 

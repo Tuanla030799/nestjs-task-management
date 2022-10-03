@@ -7,11 +7,11 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
+    @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
   ) {}
 
-  // async singUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-  //   return this.usersRepository.createUser(authCredentialsDto);
-  // }
+  async singUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+    return this.usersRepository.createUser(authCredentialsDto);
+  }
 }
