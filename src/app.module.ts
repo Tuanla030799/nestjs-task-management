@@ -11,7 +11,7 @@ import { AuthModule } from './auth/auth.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'Aa@123456',
+      password: '',
       database: 'nest',
       autoLoadEntities: true,
       synchronize: true,
