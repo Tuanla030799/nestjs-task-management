@@ -3,13 +3,22 @@ import {
   ExecutionContext,
   Injectable,
   CallHandler,
+  Type,
 } from '@nestjs/common';
-import { classToPlain } from 'class-transformer';
-import { map } from 'rxjs/operators';
+import { plainToClass } from 'class-transformer';
+import { map } from 'rxjs';
 
 @Injectable()
-export class TransformInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler<any>) {
-    return next.handle().pipe(map((data) => classToPlain(data)));
+export class TransformInterceptor<T extends Type<any>>
+  implements NestInterceptor
+{
+  constructor(private readonly type: T) {}
+
+  intercept(context: ExecutionContext, next: CallHandler) {
+    return next.handle().pipe(
+      map((data) => {
+        return plainToClass(this.type, data);
+      }),
+    );
   }
 }
