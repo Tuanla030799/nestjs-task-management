@@ -1,5 +1,5 @@
-import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
-import { TasksService } from './tasks.service';
+import { UpdateTaskStatusDto } from '../dto/update-task-status.dto';
+import { TasksService } from '../services/tasks.service';
 import {
   Body,
   Controller,
@@ -10,13 +10,15 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { GetTasksFiltersDTO } from './dto/get-taks-filter.dto';
-import { Task } from './task.entity';
+import { CreateTaskDto } from '../dto/create-task.dto';
+import { GetTasksFiltersDTO } from '../dto/get-taks-filter.dto';
+import { Task } from '../entities/task.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { User } from 'src/auth/user.entity';
+import { GetUser } from 'src/components/auth/get-user.decorator';
+import { TransformInterceptor } from 'src/transform.interceptor';
+import { User } from '../../auth/entities/user.entity';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
@@ -24,6 +26,7 @@ export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get()
+  @UseInterceptors(new TransformInterceptor(GetTasksFiltersDTO))
   getTasks(
     @Query() filterDto: GetTasksFiltersDTO,
     @GetUser() user: User,
@@ -32,7 +35,7 @@ export class TasksController {
   }
 
   @Get(':id')
-  getTaskBuId(@Param('id') id: string, @GetUser() user: User): Promise<Task> {
+  getTaskById(@Param('id') id: string, @GetUser() user: User): Promise<Task> {
     return this.tasksService.getTaskById(id, user);
   }
 

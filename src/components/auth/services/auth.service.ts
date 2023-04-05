@@ -1,9 +1,9 @@
-import { JwtPayload } from './jwt-payload.interface';
-import { UsersRepository } from './users.repository';
+import { JwtPayload } from '../jwt/jwt-payload.interface';
+import { UsersRepository } from '../repositories/users.repository';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { User } from '../entities/user.entity';
+import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt';
@@ -29,7 +29,7 @@ export class AuthService {
 
     if (email && (await bcrypt.compare(password, user.password))) {
       const payload: JwtPayload = { email };
-      const accessToken: string = await this.jwtService.sign(payload);
+      const accessToken: string = this.jwtService.sign(payload);
       return { accessToken };
     } else {
       throw new UnauthorizedException('Please check your login credentials');
