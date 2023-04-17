@@ -9,13 +9,13 @@ import {
 import { TaskStatus } from '../task-status.enum';
 import { UserEntity } from '../../auth/entities/user.entity';
 
-@Entity({ name: 'tasks' })
+@Entity({ name: 'task' })
 export class TaskEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
-  user_id: string;
+  user_id: number;
 
   @Column()
   title: string;

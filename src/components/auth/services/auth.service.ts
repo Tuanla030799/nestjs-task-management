@@ -2,7 +2,6 @@ import { JwtPayload } from '../jwt/jwt-payload.interface';
 import { UsersRepository } from '../repositories/users.repository';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities/user.entity';
 import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common/exceptions';

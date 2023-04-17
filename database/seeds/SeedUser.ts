@@ -1,47 +1,31 @@
-import { Connection } from 'typeorm'
-import {
-  UserEntity,
-  UserStatus,
-} from '../../src/components/user/entities/user.entity'
-import { HashService } from '../../src/shared/services/hash/hash.service'
-import { RoleEntity } from '../../src/components/auth/entities/role.entity'
-import * as _ from 'lodash'
+import { UserEntity } from '../../src/components/auth/entities/user.entity';
 
-export default class UsersTableSeeder {
-  public hashService: HashService
-  constructor() {
-    this.hashService = new HashService()
-  }
+import { Connection } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+
+export default class TaskTableSeeder {
   async up(connection: Connection): Promise<any> {
-    const roles = await connection.getRepository(RoleEntity).find()
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
 
     const seed = [
       {
-        email: 'admin@email.com',
-        username: 'admin',
-        password: this.hashService.hash('secret'),
-        status: UserStatus.active,
-        role: 'admin',
+        email: 'tuan221762@nuce.edu.vn',
+        password: await bcrypt.hash('Aa@123456', salt),
       },
       {
-        email: 'user@email.com',
-        username: 'user',
-        password: this.hashService.hash('secret'),
-        status: UserStatus.active,
-        role: 'user',
+        email: 'tuanla0307@gmail.com',
+        password: await bcrypt.hash('Aa@123456', salt),
       },
-    ]
+    ];
+
     const users = seed.map((item) => {
-      const user = new UserEntity()
+      const user = new UserEntity();
+      user.email = item.email;
+      user.password = String(item.password);
+      return user;
+    });
 
-      user.email = item.email
-      user.username = item.username
-      user.password = item.password
-      user.status = item.status
-      user.roles = _.filter(roles, { slug: item.role })
-
-      return user
-    })
-    await connection.manager.save(users)
+    await connection.manager.save(users);
   }
 }
