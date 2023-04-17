@@ -1,3 +1,4 @@
+import { GetUser } from '../../auth/get-user.decorator';
 import { UpdateTaskStatusDto } from '../dto/update-task-status.dto';
 import { TasksService } from '../services/tasks.service';
 import {
@@ -11,14 +12,11 @@ import {
   Post,
   Query,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { GetTasksFiltersDTO } from '../dto/get-taks-filter.dto';
 import { TaskEntity } from '../entities/task.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/components/auth/get-user.decorator';
-import { TransformInterceptor } from 'src/transform.interceptor';
 import { UserEntity } from '../../auth/entities/user.entity';
 
 @Controller('tasks')
@@ -27,7 +25,6 @@ export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get()
-  @UseInterceptors(new TransformInterceptor(GetTasksFiltersDTO))
   getTasks(
     @Query() filterDto: GetTasksFiltersDTO,
     @GetUser() user: UserEntity,
